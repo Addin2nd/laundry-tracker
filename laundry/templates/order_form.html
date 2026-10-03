@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Order Baru · Laundry Tracker{% endblock %}
+{% block content %}
+<h1>Order Baru</h1>
+<form method="post" class="card form">
+  <label>Nama pelanggan<input name="pelanggan" required value="{{ form.get('pelanggan', '') }}"></label>
+  <label>Nomor HP / WhatsApp<input name="telepon" required placeholder="0812xxxx" value="{{ form.get('telepon', '') }}"></label>
+  <label>Layanan
+    <select name="layanan" id="layanan">
+      {% for key, l in LAYANAN.items() %}
+        <option value="{{ key }}" data-harga="{{ l.harga_per_kg }}" {% if form.get('layanan') == key %}selected{% endif %}>
+          {{ l.nama }} — {{ l.harga_per_kg | rupiah }}/kg
+        </option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Berat (kg)<input name="berat_kg" id="berat" type="number" step="0.1" min="0.1" required value="{{ form.get('berat_kg', '') }}"></label>
+  <label>Catatan<textarea name="catatan" rows="2" placeholder="Opsional, mis. jangan pakai pewangi">{{ form.get('catatan', '') }}</textarea></label>
+  <p class="estimasi">Estimasi total: <strong id="estimasi">Rp0</strong> <small>(minimal 1 kg)</small></p>
+  <button class="btn">Simpan Order</button>
+</form>
+<script>
+  const sel = document.getElementById('layanan'), berat = document.getElementById('berat'), out = document.getElementById('estimasi');
+  function hitung() {
+    const harga = +sel.selectedOptions[0].dataset.harga, kg = Math.max(+berat.value || 0, berat.value ? 1 : 0);
+    out.textContent = 'Rp' + Math.round(harga * kg).toLocaleString('id-ID');
+  }
+  sel.addEventListener('change', hitung); berat.addEventListener('input', hitung); hitung();
+</script>
+{% endblock %}

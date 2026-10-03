@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{{ order.kode }} · Laundry Tracker{% endblock %}
+{% block content %}
+<h1>{{ order.kode }}</h1>
+{% include "_progress.html" %}
+<div class="card">
+  <dl>
+    <dt>Pelanggan</dt><dd>{{ order.pelanggan }} ({{ order.telepon }})</dd>
+    <dt>Layanan</dt><dd>{{ LAYANAN[order.layanan].nama }}</dd>
+    <dt>Berat</dt><dd>{{ order.berat_kg }} kg</dd>
+    <dt>Total</dt><dd><strong>{{ order.total | rupiah }}</strong></dd>
+    {% if order.catatan %}<dt>Catatan</dt><dd>{{ order.catatan }}</dd>{% endif %}
+    <dt>Masuk</dt><dd>{{ order.dibuat }}</dd>
+    <dt>Update terakhir</dt><dd>{{ order.diperbarui }}</dd>
+  </dl>
+  <div class="actions">
+    {% if berikutnya %}
+      <form method="post" action="{{ url_for('laundry.majukan_status', kode=order.kode) }}">
+        <button class="btn">Ubah ke: {{ STATUS_LABEL[berikutnya] }}</button>
+      </form>
+    {% endif %}
+    <a class="btn secondary" href="{{ wa_link }}" target="_blank" rel="noopener">Kirim update via WhatsApp</a>
+  </div>
+</div>
+{% endblock %}

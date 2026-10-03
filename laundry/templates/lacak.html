@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Lacak Order · Laundry Tracker{% endblock %}
+{% block content %}
+<h1>Lacak Laundry Anda</h1>
+<form class="filter" method="get">
+  <input name="kode" value="{{ kode }}" placeholder="Masukkan kode order, mis. LDR-261003-7F3A" required>
+  <button>Lacak</button>
+</form>
+{% if kode and not order %}
+  <div class="flash error">Order dengan kode {{ kode }} tidak ditemukan.</div>
+{% elif order %}
+  {% include "_progress.html" %}
+  <div class="card">
+    <dl>
+      <dt>Layanan</dt><dd>{{ LAYANAN[order.layanan].nama }} · {{ order.berat_kg }} kg</dd>
+      <dt>Total</dt><dd>{{ order.total | rupiah }}</dd>
+      <dt>Update terakhir</dt><dd>{{ order.diperbarui }}</dd>
+    </dl>
+  </div>
+{% endif %}
+{% endblock %}

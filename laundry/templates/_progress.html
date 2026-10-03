@@ -1,0 +1,6 @@
+<ol class="progress">
+  {% set idx = STATUS.index(order.status) %}
+  {% for s in STATUS %}
+    <li class="{% if loop.index0 <= idx %}done{% endif %}">{{ STATUS_LABEL[s] }}</li>
+  {% endfor %}
+</ol>
